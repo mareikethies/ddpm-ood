@@ -25,8 +25,8 @@ def main():
             path = Path(path)
             new_path = new_data_dir / path.parts[-4] / path.parts[-3] / path.parts[-2] / path.name
             dict.update({str(path): str(new_path)})
-        contents.rename(columns=dict, inplace=True)
-        contents.to_csv(new_data_dir / 'data_splits' / file_name)
+        new_contents = contents.rename(columns=dict)
+        new_contents.to_csv(new_data_dir / 'data_splits' / file_name, index=False)
 
 
 if __name__ == '__main__':
