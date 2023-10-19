@@ -27,15 +27,19 @@ WORKDIR="$TMPDIR/$SLURM_JOBID"
 mkdir "$WORKDIR"
 echo "Start copying and unpacking data to compute node."
 echo "$WORKDIR"
-cp -r $WORK/Data/OOD/input_data/data_splits $WORKDIR
-cp -r $WORK/Data/OOD/input_data/Decathlon $WORKDIR
+mkdir "$WORKDIR"/Decathlon
+cp -r $WORK/Data/OOD/input_data/Decathlon/Task01_BrainTumour.tar $WORKDIR/Decathlon/Task01_BrainTumour.tar
 cd $WORKDIR/Decathlon
 tar xf Task01_BrainTumour.tar
 echo "Done copying and unpacking data to compute node."
 
+export output_root=$WORK/Data/OOD/output_data
+export data_root=$WORK/Data/OOD/input_data
+
 cd /home/woody/iwi5/iwi5046h/Code/ddpm-ood/
 
-export output_root=$WORK/Data/OOD/output_data
+python adapt_paths_on_cluster.py --new_data_root $WORKDIR
+
 export data_root=$WORKDIR
 
 srun python train_vqvae.py  \

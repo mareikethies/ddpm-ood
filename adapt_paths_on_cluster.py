@@ -4,7 +4,7 @@ import pandas as pd
 from pathlib import Path
 
 # just for testing
-os.environ['data_root'] = '/media/mareike/Elements/Data/3DMedicalDecathlon'
+# os.environ['data_root'] = '/media/mareike/Elements/Data/3DMedicalDecathlon'
 
 def main():
     parser = argparse.ArgumentParser()
