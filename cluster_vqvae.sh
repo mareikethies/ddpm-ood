@@ -1,9 +1,9 @@
 #!/bin/bash -l
-#SBATCH --job-name=ddpm_ood
+#SBATCH --job-name=ddpm_ood_vqvae
 #SBATCH --time=24:00:00
 #SBATCH --partition=a40
-#SBATCH --gres=gpu:a40:1
-#SBATCH --ntasks-per-node=1
+#SBATCH --gres=gpu:a40:2
+#SBATCH --ntasks-per-node=2
 # if chained after another job, enter the job number here
 # #SBATCH --dependency=afterany:146054
 #SBATCH --mail-user=mareike.thies@fau.de
@@ -42,14 +42,14 @@ python adapt_paths_on_cluster.py --new_data_root $WORKDIR
 
 export data_root=$WORKDIR
 
-srun python train_vqvae.py  \
+torchrun --nproc_per_node=2 --nnodes=1 --node_rank=0 train_vqvae.py  \
 --output_dir=${output_root} \
 --model_name=vqvae_decathlon \
 --training_ids=${data_root}/data_splits/Task01_BrainTumour_train.csv \
 --validation_ids=${data_root}/data_splits/Task01_BrainTumour_val.csv  \
 --is_grayscale=1 \
 --n_epochs=300 \
---batch_size=8  \
+--batch_size=6  \
 --eval_freq=10 \
 --cache_data=0  \
 --vqvae_downsample_parameters=[[2,4,1,1],[2,4,1,1],[2,4,1,1],[2,4,1,1]] \
