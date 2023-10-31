@@ -128,7 +128,7 @@ def main(args):
             "Task07",
             "Task08",
             "Task09",
-            "Task10",
+            # "Task10",
         )
 
     else:
@@ -182,13 +182,17 @@ def main(args):
             plot_df = results_df.loc[results_df["type"] == type]
             unique_ids = plot_df["filename"].unique()
 
-            for id in unique_ids[:50]:
+            for i, id in enumerate(unique_ids[:50]):
                 plt.plot(
                     plot_df.loc[plot_df["filename"] == id]["t"],
                     plot_df.loc[plot_df["filename"] == id][f"z_score_{plot_target}"],
                     color=colors[type],
                     alpha=0.3,
+                    label=type if i == 0 else ""
                 )
+
+        plt.title(out_dataset)
+        plt.legend()
         plt.show()
         # calculate ROC scores
         # in-distribution scores/class
