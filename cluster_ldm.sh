@@ -2,8 +2,8 @@
 #SBATCH --job-name=ddpm_ood_ldm
 #SBATCH --time=24:00:00
 #SBATCH --partition=a40
-#SBATCH --gres=gpu:a40:2
-#SBATCH --ntasks-per-node=2
+#SBATCH --gres=gpu:a40:4
+#SBATCH --ntasks-per-node=4
 # if chained after another job, enter the job number here
 # #SBATCH --dependency=afterany:146054
 #SBATCH --mail-user=mareike.thies@fau.de
@@ -42,7 +42,7 @@ python adapt_paths_on_cluster.py --new_data_root $WORKDIR
 
 export data_root=$WORKDIR
 
-torchrun --nproc_per_node=2 --nnodes=1 --node_rank=0 train_ddpm.py \
+torchrun --nproc_per_node=4 --nnodes=1 --node_rank=0 train_ddpm.py \
   --output_dir=${output_root} \
   --model_name=ddpm_decathlon \
   --vqvae_checkpoint=${output_root}/vqvae_decathlon/checkpoint.pth \
@@ -50,7 +50,7 @@ torchrun --nproc_per_node=2 --nnodes=1 --node_rank=0 train_ddpm.py \
   --validation_ids=${data_root}/data_splits/Task01_BrainTumour_val.csv  \
   --is_grayscale=1 \
   --n_epochs=12000 \
-  --batch_size=6 \
+  --batch_size=8 \
   --eval_freq=25 \
   --checkpoint_every=1000 \
   --cache_data=0  \

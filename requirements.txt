@@ -1,7 +1,7 @@
 lpips==0.1.4
 matplotlib
 torch==1.13.1
-monai[nibabel]
+monai[nibabel]  # monai 1.3 does not work, monai 1.0 does work, not sure about the stuff in between
 monai-generative
 pandas
 scipy
